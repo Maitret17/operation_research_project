@@ -2,6 +2,9 @@ def max_string_column(column_index: int, matrix: list[list[int]], cost: list[int
     lst = []
     for i in range(len(matrix)):
         lst.append(len(str(matrix[i][column_index])))
+    print(matrix)
+    print(column_index)
+    print(cost)
     lst.append(len(str(cost[column_index])))
     return max(lst)
 
