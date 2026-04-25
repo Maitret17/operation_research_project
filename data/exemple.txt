@@ -1,0 +1,7 @@
+# n m
+2 2
+# cost then provision at the last column
+30 20 100
+10 50 100
+# orders
+100 100
