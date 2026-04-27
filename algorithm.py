@@ -244,10 +244,10 @@ def connected(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
         subgraphs.append(visited_names)
         
     if len(subgraphs) == 1:
-        print("The graph is complete and has the following path:")
+        print("The graph is connected and has the following path:")
         print(subgraphs[0])
     else:
-        print("The graph is not complete and is composed of the following subgraphs:")
+        print("The graph is unconnected and is composed of the following subgraphs:")
         for i in subgraphs:
             print(i)
     return len(subgraphs) == 1
