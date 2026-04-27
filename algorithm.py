@@ -175,8 +175,79 @@ def acyclic(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
     if is_acyclic:
         print("The graph is acyclic and has the following path:")
         print(visited_names)
-        return is_acyclic
     else:
         print("The graph has the following cycle:")
         print(visited_names)
-        return is_acyclic
+    return is_acyclic
+
+    
+def connected(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
+    subgraphs : list[list[str]] =[] # To display in case of a cycle
+    queue : list[tuple] = [] # Is formated as such that each element of the list takes the following form : (B,i) 
+                        # - B is either a binary number that tell if the "vertice" is a provision (0) or an order (1)    
+                        # - i refers to the index of the "vertice" in the cost_row or provision_column
+    finished = False
+    
+    last_visited = [-1]
+    visited_provisions = [False]*n
+    visited_orders = [False]*m # These two list exist in case of a disconnected graph 
+
+    
+    while not(finished):
+        visited_names : list[str] = []
+        is_complete = True
+
+        for i in range(n):
+            if not visited_provisions[i]:
+                queue.append((0,i))
+                break
+        if len(queue) == 0:
+            for i in range(m):
+                if not visited_orders[i]:
+                    queue.append((1,i))
+                    break
+        if len(queue) == 0:
+            finished = True
+        else : 
+            last_visited.append(-1)
+        
+        while is_complete and len(queue) > 0:
+            if queue[0][0] == 0: # We have a "provision" vertice
+                for i in range(m):
+                    if transport_matrix[queue[0][1]][i] != 0 and not visited_orders[i]:
+                        queue.append((1,i))
+                        last_visited.append(queue[0][1])
+                
+                name = "P" + str(queue[0][1]+1)
+                visited_provisions[queue[0][1]] = True
+                visited_names.append(name)
+                last_visited.pop(0)
+                queue.pop(0)
+            
+            else: # We have an "order" vertice
+                for i in range(n):
+                    if transport_matrix[i][queue[0][1]] != 0 and not visited_provisions[i]:
+                        queue.append((0,i))
+                        last_visited.append(queue[0][1])
+                
+                name = "C" + str(queue[0][1]+1)
+                visited_orders[queue[0][1]] = True
+                visited_names.append(name)
+                last_visited.pop(0)
+                queue.pop(0)
+
+            if len(queue) == 0:
+                if len(visited_names) == m+n:
+                    finished = True
+                else: # The graph is discontinued and we need to restart a new subgraph
+                    is_complete = False
+        subgraphs.append(visited_names)
+        
+    if len(subgraphs) == 1:
+        print("The graph is complete and has the following path:")
+        print(subgraphs[0])
+    else:
+        print("The graph is not complete and is composed of the following subgraphs:")
+        for i in subgraphs:
+            print(i)
+    return len(subgraphs) == 1
