@@ -1,4 +1,5 @@
 from copy import deepcopy
+from utils import is_degenerate
 
 INF = 1*10**20
 
@@ -24,7 +25,10 @@ def total_cost(cost_matrix: list[list[int]], transport_matrix: list[list[int]]) 
     total = 0
     for i in range(len(cost_matrix)):
         for j in range(len(cost_matrix[0])):
-            total += cost_matrix[i][j] * transport_matrix[i][j]
+            quantity = transport_matrix[i][j]
+            if quantity == -1:
+                quantity = 0
+            total += cost_matrix[i][j] * quantity
     return total
 
 def balashammer(n: int, m: int, cost_matrix: list[list[int]], cost_row: list[int], provision_column: list[int]) -> list[list[int]]:
@@ -112,6 +116,7 @@ def balashammer(n: int, m: int, cost_matrix: list[list[int]], cost_row: list[int
                 searchinglist_m.remove(minindex)
 
     return transport_matrix
+
 
 def acyclic(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
     visited_names : list[str] =[] # To display in case of a cycle
@@ -251,3 +256,29 @@ def connected(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
         for i in subgraphs:
             print(i)
     return len(subgraphs) == 1
+
+
+def fix_degeneracy(n: int, m: int, cost_matrix: list[list[int]], transport_matrix: list[list[int]]) -> list[list[int]]:
+    while is_degenerate(n, m, transport_matrix):
+        candidates = []
+
+        for i in range(n):
+            for j in range(m):
+                if transport_matrix[i][j] == 0:
+                    candidates.append((cost_matrix[i][j], i, j))
+
+        candidates.sort()
+        edge_add = False
+        for cost, i, j in candidates:
+            test_matrix = deepcopy(transport_matrix)
+            test_matrix[i][j] = -1
+
+            if acyclic(n, m, test_matrix):
+                transport_matrix[i][j] = -1
+                print(f"One basic edge was added at row {i+1} column {j+1}")
+                edge_add = True
+                break
+
+        if not edge_add:
+            raise ValueError("Could not fix degeneracy without creating a cycle")
+    return transport_matrix
