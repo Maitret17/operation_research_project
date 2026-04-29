@@ -1,7 +1,7 @@
 from copy import deepcopy
 from utils import is_degenerate
 
-INF = 1*10**20
+INF = 1*10**20 #  Faudra pas oublier ça avec le display
 
 def northwest(n: int, m: int, cost_row: list[int], provision_column: list[int]) -> list[list[int]]:
     transport_matrix = [[0] * m for _ in range(n)]
@@ -177,12 +177,12 @@ def acyclic(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
                             break
                 last_visited.append(-1)
         
-    if is_acyclic:
-        print("The graph is acyclic and has the following path:")
-        print(visited_names)
-    else:
-        print("The graph has the following cycle:")
-        print(visited_names)
+    #if is_acyclic:
+        #print("The graph is acyclic and has the following path:")
+        #print(visited_names)
+    #else:
+        #print("The graph has the following cycle:")
+        #print(visited_names)
     return is_acyclic
 
     
@@ -282,3 +282,101 @@ def fix_degeneracy(n: int, m: int, cost_matrix: list[list[int]], transport_matri
         if not edge_add:
             raise ValueError("Could not fix degeneracy without creating a cycle")
     return transport_matrix
+
+
+def compute_potentials(n: int, m: int, cost_matrix: list[list[int]], transport_matrix: list[list[int]]) -> tuple[list[int], list[int]]: # works on non degenerate tables
+    u = [INF] * n
+    v = [INF] * m
+    u[0] = 0
+
+    updated = True
+    while updated:
+        updated = False
+        for i in range(n):
+            for j in range(m):
+                if transport_matrix[i][j] != 0: # Basic
+                    if u[i] != INF and v[j] == INF:
+                        v[j] = cost_matrix[i][j] - u[i]
+                        updated = True
+                    elif v[j] != INF and u[i] == INF:
+                        u[i] = cost_matrix[i][j] - v[j]
+                        updated = True
+    return u, v # Side note, u[i] + v[j] = cost_matrix[i][j]
+
+def marginal_cost(n: int, m: int, u: list[int], v: list[int], cost_matrix: list[list[int]], transport_matrix: list[list[int]]) -> list[list[int]]:
+    marginal_matrix = [[INF] * m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            if transport_matrix[i][j] == 0:  # For every non basic nodes
+                marginal_matrix[i][j] = cost_matrix[i][j] - (u[i] + v[j]) # Delta (real cost - potential cost)
+    return marginal_matrix
+
+def find_smallest_edge(n, m, marginal_matrix):
+    best_value = INF
+    best_edge = None
+    for i in range(n):
+        for j in range(m):
+            if marginal_matrix[i][j] < best_value:
+                best_value = marginal_matrix[i][j]
+                best_edge = (i, j)
+    return best_value, best_edge
+
+def is_optimal(best_value):
+    if best_value is None:
+        return True
+    if best_value < 0:
+        return False
+    return True
+
+
+def find_cycle(n, m, transport_matrix, start_cell): # After some research, only one cycle can be created.
+    to_explore = [ # Stack that allows us to basically check each element in there one at a time
+        (start_cell, [start_cell], "row"), # current_edge, current_path, move_type
+        (start_cell, [start_cell], "column")
+    ]
+    while len(to_explore) > 0:
+        current, path, move_type = to_explore.pop() # Last in First out, takes the top most element
+        i, j = current
+
+        if move_type == "row": # We move along the row, changing columns
+            for col in range(m):
+                next_cell = (i, col)
+
+                if next_cell == current: # Ignore
+                    continue
+
+                if next_cell == start_cell and len(path) >= 4: # 4 is the shortest length possible for a cycle
+                    return path + [start_cell]
+
+                if transport_matrix[i][col] != 0 and next_cell not in path:
+                    to_explore.append((next_cell, path + [next_cell], "column"))
+
+        if move_type == "column": # We move along the column, changing rows
+            for row in range(n):
+                next_cell = (row, j)
+
+                if next_cell == current:  # Ignore
+                    continue
+
+                if next_cell == start_cell and len(path) >= 4:
+                    return path + [start_cell]
+
+                if transport_matrix[row][j] != 0 and next_cell not in path:
+                    to_explore.append((next_cell, path + [next_cell], "row"))
+
+    raise ValueError(f"No cycle found, from start: {start_cell}. The matrix here isn't good (check degeneracy)") # This should not be reached
+
+
+def apply_cycle_update(transport_matrix, path) -> list[list[int]]:
+    path = path[:-1] # We have a duplicate at the start and end of the list
+    theta = min((0 if transport_matrix[i][j] == -1 else transport_matrix[i][j]) for i, j in path[1::2]) # min of the - value, without the -1
+    for k in range(len(path)):
+        i, j = path[k]
+        if transport_matrix[i][j] == -1:
+            transport_matrix[i][j] = 0
+        if k % 2 == 0:
+            transport_matrix[i][j] += theta
+        else:
+            transport_matrix[i][j] -= theta
+    return transport_matrix
+
