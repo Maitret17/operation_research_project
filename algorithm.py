@@ -118,7 +118,7 @@ def balashammer(n: int, m: int, cost_matrix: list[list[int]], cost_row: list[int
     return transport_matrix
 
 
-def acyclic(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
+def acyclic(n: int, m: int, transport_matrix: list[list[int]] ,doPrint =False) -> (bool):
     visited_names : list[str] =[] # To display in case of a cycle
     queue : list[tuple] = [] # Is formated as such that each element of the list takes the following form : (B,i) 
                         # - B is either a binary number that tell if the "vertice" is a provision (0) or an order (1)    
@@ -176,13 +176,13 @@ def acyclic(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
                             queue.append((1,i))
                             break
                 last_visited.append(-1)
-        
-    if is_acyclic:
-        print("The graph is acyclic and has the following path:")
-        print(visited_names)
-    else:
-        print("The graph has the following cycle:")
-        print(visited_names)
+    if doPrint:     
+        if is_acyclic:
+            print("The graph is acyclic and has the following path:")
+            print(visited_names)
+        else:
+            print("The graph has the following cycle:")
+            print(visited_names)
     return is_acyclic
 
     

@@ -2,6 +2,11 @@ from parser import parser
 from algorithm import balashammer, northwest, acyclic, connected, fix_degeneracy
 from display import print_matrix
 import os
+def sort_key(x):
+    try:
+        return (0, int(x))
+    except ValueError:
+        return (1, str(x))
 
 def menu():
     while True:
@@ -11,9 +16,11 @@ def menu():
             if filename.endswith(".txt"):
                 name = filename[:-4]
                 transp_list[transp_list.index(filename)]=name
-                print(name)
             else:
                 transp_list.remove(filename)
+        transp_list = sorted(transp_list, key=sort_key)
+        for filename in transp_list:
+            print(filename)
         transp_selected = 0
         print("="*80)
         while not(transp_selected in transp_list):
@@ -38,11 +45,10 @@ def menu():
         if algo_selected == "3":
             pass
             #matrix = stepping_stone(n, m, cost_row, provision_column)
-        print(matrix)
         if matrix!=0:
             print_matrix(n, m, matrix, provision_column, cost_row)
             print("")
-            acyclic(n, m, matrix)
+            acyclic(n, m, matrix,True)
             print("")
             connected(n, m, matrix)
         print("="*80)
