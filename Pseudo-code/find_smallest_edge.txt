@@ -1,0 +1,16 @@
+FUNCTION find_smallest_edge(n, m, marginal_matrix): -> best_value, best_edge
+    START
+        SET best_value to INF
+        SET best_edge to NULL
+
+        FOR each row index i from 0 to n-1
+            FOR each column index j from 0 to m-1
+                IF marginal_matrix[i][j] < best_value THEN
+                    SET best_value to marginal_matrix[i][j]
+                    SET best_edge to (i, j)
+                END IF
+            ENDFOR
+        ENDFOR
+
+        RETURN best_value, best_edge
+    END

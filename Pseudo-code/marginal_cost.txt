@@ -1,0 +1,14 @@
+FUNCTION marginal_cost(n, m, u, v, cost_matrix, transport_matrix): -> marginal_matrix
+    START
+        SET marginal_matrix to a n×m matrix of INF values
+
+        FOR each row index i from 0 to n-1
+            FOR each column index j from 0 to m-1
+                IF transport_matrix[i][j] equals 0 THEN  // Non-basic cell
+                    SET marginal_matrix[i][j] to cost_matrix[i][j] - (u[i] + v[j])
+                END IF
+            ENDFOR
+        ENDFOR
+
+        RETURN marginal_matrix
+    END

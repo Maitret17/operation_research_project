@@ -1,0 +1,16 @@
+FUNCTION total_cost(cost_matrix, transport_matrix): -> total
+    START
+        SET total to 0
+
+        FOR each row index i in cost_matrix
+            FOR each column index j in cost_matrix
+                SET quantity to transport_matrix[i][j]
+                IF quantity equals -1 THEN
+                    SET quantity to 0
+                END IF
+                COMPUTE total as total + cost_matrix[i][j] times quantity
+            ENDFOR
+        ENDFOR
+
+        RETURN total
+    END
