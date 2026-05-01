@@ -1,0 +1,211 @@
+﻿transportation problems file list:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+================================================================================
+Select a transportation problem file or type 'q' to exit :
+================================================================================
+The cost matrix:
+        C1  C2 Provisions
+P1      50  20        100
+P2      10  50        200
+P3      55  40        100
+P4      35  45        200
+P5      12   8        200
+Orders 300 500           
+================================================================================
+Select which algorithm to use:
+1 - northwest
+2 - balashammer
+================================================================================
+The initial transportation proposal: 
+        C1  C2 Provisions
+P1     100   0        100
+P2     200   0        200
+P3       0 100        100
+P4       0 200        200
+P5       0 200        200
+Orders 300 500           
+
+Total transport cost: 21600
+
+----Iteration 1----
+
+Current transportation proposal:
+        C1  C2 Provisions
+P1     100   0        100
+P2     200   0        200
+P3       0 100        100
+P4       0 200        200
+P5       0 200        200
+Orders 300 500           
+
+Current total cost: 21600
+Degeneracy test:
+Basic edges: 5
+Expected basic edges: 6
+
+The proposal is degenerate
+One basic edge was added at row 5 column 1
+Proposal after degeneracy fix:
+        C1  C2 Provisions
+P1     100   0        100
+P2     200   0        200
+P3       0 100        100
+P4       0 200        200
+P5      -1 200        200
+Orders 300 500           
+
+Transport graph test:
+The graph is connected and has the following nodes:
+P1, C1, P2, P5, C2, P3, P4
+The graph is acyclic
+The transport graph is a tree
+
+Potential matrix:
+       C1 C2
+P1     50 46
+P2     10  6
+P3     44 40
+P4     49 45
+P5     12  8
+
+Marginal cost matrix:
+        C1  C2
+P1       ∞ -26
+P2       ∞  44
+P3      11   ∞
+P4     -14   ∞
+P5       ∞   ∞
+
+Edge to add: row 1, column 2
+Marginal cost: -26
+Cycle: 
+[(0, 1), (4, 1), (4, 0), (0, 0), (0, 1)]
+Theta: 100
+
+Updated transportation proposal:
+        C1  C2 Provisions
+P1       0 100        100
+P2     200   0        200
+P3       0 100        100
+P4       0 200        200
+P5     100 100        200
+Orders 300 500           
+
+----Iteration 2----
+
+Current transportation proposal:
+        C1  C2 Provisions
+P1       0 100        100
+P2     200   0        200
+P3       0 100        100
+P4       0 200        200
+P5     100 100        200
+Orders 300 500           
+
+Current total cost: 19000
+Degeneracy test:
+Basic edges: 6
+Expected basic edges: 6
+
+The proposal is not degenerate
+
+Transport graph test:
+The graph is connected and has the following nodes:
+P1, C2, P3, P4, P5, C1, P2
+The graph is acyclic
+The transport graph is a tree
+
+Potential matrix:
+       C1 C2
+P1     24 20
+P2     10  6
+P3     44 40
+P4     49 45
+P5     12  8
+
+Marginal cost matrix:
+        C1 C2
+P1      26  ∞
+P2       ∞ 44
+P3      11  ∞
+P4     -14  ∞
+P5       ∞  ∞
+
+Edge to add: row 4, column 1
+Marginal cost: -14
+Cycle: 
+[(3, 0), (4, 0), (4, 1), (3, 1), (3, 0)]
+Theta: 100
+
+Updated transportation proposal:
+        C1  C2 Provisions
+P1       0 100        100
+P2     200   0        200
+P3       0 100        100
+P4     100 100        200
+P5       0 200        200
+Orders 300 500           
+
+----Iteration 3----
+
+Current transportation proposal:
+        C1  C2 Provisions
+P1       0 100        100
+P2     200   0        200
+P3       0 100        100
+P4     100 100        200
+P5       0 200        200
+Orders 300 500           
+
+Current total cost: 17600
+Degeneracy test:
+Basic edges: 6
+Expected basic edges: 6
+
+The proposal is not degenerate
+
+Transport graph test:
+The graph is connected and has the following nodes:
+P1, C2, P3, P4, P5, C1, P2
+The graph is acyclic
+The transport graph is a tree
+
+Potential matrix:
+       C1 C2
+P1     10 20
+P2     10 20
+P3     30 40
+P4     35 45
+P5     -2  8
+
+Marginal cost matrix:
+       C1 C2
+P1     40  ∞
+P2      ∞ 30
+P3     25  ∞
+P4      ∞  ∞
+P5     14  ∞
+
+The proposal is optimal
+Minimal transportation proposal:
+        C1  C2 Provisions
+P1       0 100        100
+P2     200   0        200
+P3       0 100        100
+P4     100 100        200
+P5       0 200        200
+Orders 300 500           
+
+Minimal cost: 17600
+

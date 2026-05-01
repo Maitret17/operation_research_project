@@ -1,0 +1,79 @@
+﻿transportation problems file list:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+================================================================================
+Select a transportation problem file or type 'q' to exit :
+================================================================================
+The cost matrix:
+        C1  C2 Provisions
+P1      10  20        100
+P2      30  10        100
+Orders 100 100           
+================================================================================
+Select which algorithm to use:
+1 - northwest
+2 - balashammer
+================================================================================
+The initial transportation proposal: 
+        C1  C2 Provisions
+P1     100   0        100
+P2       0 100        100
+Orders 100 100           
+
+Total transport cost: 2000
+
+----Iteration 1----
+
+Current transportation proposal:
+        C1  C2 Provisions
+P1     100   0        100
+P2       0 100        100
+Orders 100 100           
+
+Current total cost: 2000
+Degeneracy test:
+Basic edges: 2
+Expected basic edges: 3
+
+The proposal is degenerate
+One basic edge was added at row 1 column 2
+Proposal after degeneracy fix:
+        C1  C2 Provisions
+P1     100  -1        100
+P2       0 100        100
+Orders 100 100           
+
+Transport graph test:
+The graph is connected and has the following nodes:
+P1, C1, C2, P2
+The graph is acyclic
+The transport graph is a tree
+
+Potential matrix:
+       C1 C2
+P1     10 20
+P2      0 10
+
+Marginal cost matrix:
+       C1 C2
+P1      ∞  ∞
+P2     30  ∞
+
+The proposal is optimal
+Minimal transportation proposal:
+        C1  C2 Provisions
+P1     100   0        100
+P2       0 100        100
+Orders 100 100           
+
+Minimal cost: 2000

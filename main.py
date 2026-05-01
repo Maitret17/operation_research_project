@@ -18,7 +18,7 @@ def stepping_stone(n, m, cost_matrix, transport_matrix, provision_column, cost_r
     while True:
         print(f"----Iteration {iteration}----\n")
         print("Current transportation proposal:")
-        print_matrix(n, m, transport_matrix, cost_row, provision_column)
+        print_matrix(n, m, transport_matrix, provision_column, cost_row)
         print(f"\nCurrent total cost: {total_cost(cost_matrix, transport_matrix)}")
 
         print("Degeneracy test:")
@@ -29,7 +29,7 @@ def stepping_stone(n, m, cost_matrix, transport_matrix, provision_column, cost_r
             print("The proposal is degenerate")
             transport_matrix = fix_degeneracy(n, m, cost_matrix, transport_matrix)
             print("Proposal after degeneracy fix:")
-            print_matrix(n, m, transport_matrix, cost_row, provision_column)
+            print_matrix(n, m, transport_matrix, provision_column, cost_row)
             # Maybe show it after fixed
         else:
             print("The proposal is not degenerate")
@@ -75,7 +75,7 @@ def stepping_stone(n, m, cost_matrix, transport_matrix, provision_column, cost_r
 
     transport_matrix = clean_epsilon(transport_matrix)
     print("Minimal transportation proposal:")
-    print_matrix(n, m, transport_matrix, cost_row, provision_column)
+    print_matrix(n, m, transport_matrix, provision_column, cost_row)
     print(f"\nMinimal cost: {total_cost(cost_matrix, transport_matrix)}")
     return transport_matrix
 
@@ -111,7 +111,7 @@ def menu():
         n, m, cost_matrix, cost_row, provision_column = parser(transp_selected)
         print("The cost matrix:")
         # Display corresponding matrix
-        print_matrix(n, m, cost_matrix, cost_row, provision_column)
+        print_matrix(n, m, cost_matrix, provision_column, cost_row)
 
         print("=" * 80)
         print(
