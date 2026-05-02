@@ -1,0 +1,189 @@
+﻿transportation problems file list:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+================================================================================
+Select a transportation problem file or type 'q' to exit :
+================================================================================
+The cost matrix:
+        C1  C2  C3  C4  C5  C6  C7 Provisions
+P1     300  20  15  16  17  18  20        500
+P2       1  50  24  30  22  27  19        500
+P3      50  40  30   3  25  26   3       2500
+Orders 500 500 500 500 500 500 500           
+================================================================================
+Select which algorithm to use:
+1 - northwest
+2 - balashammer
+================================================================================
+The initial transportation proposal: 
+        C1  C2  C3  C4  C5  C6  C7 Provisions
+P1     500   0   0   0   0   0   0        500
+P2       0 500   0   0   0   0   0        500
+P3       0   0 500 500 500 500 500       2500
+Orders 500 500 500 500 500 500 500           
+
+Total transport cost: 218500
+
+----Iteration 1----
+
+Current transportation proposal:
+        C1  C2  C3  C4  C5  C6  C7 Provisions
+P1     500   0   0   0   0   0   0        500
+P2       0 500   0   0   0   0   0        500
+P3       0   0 500 500 500 500 500       2500
+Orders 500 500 500 500 500 500 500           
+
+Current total cost: 218500
+Degeneracy test:
+Basic edges: 7
+Expected basic edges: 9
+
+The proposal is degenerate
+One basic edge was added at row 2 column 1
+One basic edge was added at row 1 column 3
+Proposal after degeneracy fix:
+        C1  C2  C3  C4  C5  C6  C7 Provisions
+P1     500   0  -1   0   0   0   0        500
+P2      -1 500   0   0   0   0   0        500
+P3       0   0 500 500 500 500 500       2500
+Orders 500 500 500 500 500 500 500           
+
+Transport graph test:
+The graph is connected and has the following nodes:
+P1, C1, C3, P2, P3, C2, C4, C5, C6, C7
+The graph is acyclic
+The transport graph is a tree
+
+Potential matrix:
+        C1  C2   C3   C4   C5   C6   C7
+P1     300 349   15  -12   10   11  -12
+P2       1  50 -284 -311 -289 -288 -311
+P3     315 364   30    3   25   26    3
+
+Marginal cost matrix:
+         C1   C2  C3  C4  C5  C6  C7
+P1        ∞ -329   ∞  28   7   7  32
+P2        ∞    ∞ 308 341 311 315 330
+P3     -265 -324   ∞   ∞   ∞   ∞   ∞
+
+Edge to add: row 1, column 2
+Marginal cost: -329
+Cycle: 
+[(0, 1), (1, 1), (1, 0), (0, 0), (0, 1)]
+Theta: 500
+
+Updated transportation proposal:
+        C1  C2  C3  C4  C5  C6  C7 Provisions
+P1       0 500   0   0   0   0   0        500
+P2     500   0   0   0   0   0   0        500
+P3       0   0 500 500 500 500 500       2500
+Orders 500 500 500 500 500 500 500           
+
+----Iteration 2----
+
+Current transportation proposal:
+        C1  C2  C3  C4  C5  C6  C7 Provisions
+P1       0 500   0   0   0   0   0        500
+P2     500   0   0   0   0   0   0        500
+P3       0   0 500 500 500 500 500       2500
+Orders 500 500 500 500 500 500 500           
+
+Current total cost: 54000
+Degeneracy test:
+Basic edges: 7
+Expected basic edges: 9
+
+The proposal is degenerate
+One basic edge was added at row 1 column 3
+One basic edge was added at row 2 column 7
+Proposal after degeneracy fix:
+        C1  C2  C3  C4  C5  C6  C7 Provisions
+P1       0 500  -1   0   0   0   0        500
+P2     500   0   0   0   0   0  -1        500
+P3       0   0 500 500 500 500 500       2500
+Orders 500 500 500 500 500 500 500           
+
+Transport graph test:
+The graph is connected and has the following nodes:
+P1, C2, C3, P3, C4, C5, C6, C7, P2, C1
+The graph is acyclic
+The transport graph is a tree
+
+Potential matrix:
+        C1 C2 C3  C4 C5 C6  C7
+P1     -30 20 15 -12 10 11 -12
+P2       1 51 46  19 41 42  19
+P3     -15 35 30   3 25 26   3
+
+Marginal cost matrix:
+        C1 C2  C3 C4  C5  C6 C7
+P1     330  ∞   ∞ 28   7   7 32
+P2       ∞ -1 -22 11 -19 -15  ∞
+P3      65  5   ∞  ∞   ∞   ∞  ∞
+
+Edge to add: row 2, column 3
+Marginal cost: -22
+Cycle: 
+[(1, 2), (2, 2), (2, 6), (1, 6), (1, 2)]
+Theta: 0
+
+Updated transportation proposal:
+        C1  C2  C3  C4  C5  C6  C7 Provisions
+P1       0 500  -1   0   0   0   0        500
+P2     500   0  -1   0   0   0   0        500
+P3       0   0 500 500 500 500 500       2500
+Orders 500 500 500 500 500 500 500           
+
+----Iteration 3----
+
+Current transportation proposal:
+        C1  C2  C3  C4  C5  C6  C7 Provisions
+P1       0 500  -1   0   0   0   0        500
+P2     500   0  -1   0   0   0   0        500
+P3       0   0 500 500 500 500 500       2500
+Orders 500 500 500 500 500 500 500           
+
+Current total cost: 54000
+Degeneracy test:
+Basic edges: 9
+Expected basic edges: 9
+
+The proposal is not degenerate
+
+Transport graph test:
+The graph is connected and has the following nodes:
+P1, C2, C3, P2, P3, C1, C4, C5, C6, C7
+The graph is acyclic
+The transport graph is a tree
+
+Potential matrix:
+       C1 C2 C3  C4 C5 C6  C7
+P1     -8 20 15 -12 10 11 -12
+P2      1 29 24  -3 19 20  -3
+P3      7 35 30   3 25 26   3
+
+Marginal cost matrix:
+        C1 C2 C3 C4 C5 C6 C7
+P1     308  ∞  ∞ 28  7  7 32
+P2       ∞ 21  ∞ 33  3  7 22
+P3      43  5  ∞  ∞  ∞  ∞  ∞
+
+The proposal is optimal
+Minimal transportation proposal:
+        C1  C2  C3  C4  C5  C6  C7 Provisions
+P1       0 500   0   0   0   0   0        500
+P2     500   0   0   0   0   0   0        500
+P3       0   0 500 500 500 500 500       2500
+Orders 500 500 500 500 500 500 500           
+
+Minimal cost: 54000

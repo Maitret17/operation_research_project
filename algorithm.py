@@ -1,7 +1,5 @@
 from copy import deepcopy
-from utils import is_degenerate
-
-INF = 1*10**20 #  Faudra pas oublier ça avec le display
+from utils import is_degenerate, INF, clean_epsilon
 
 def northwest(n: int, m: int, cost_row: list[int], provision_column: list[int]) -> list[list[int]]:
     transport_matrix = [[0] * m for _ in range(n)]
@@ -118,27 +116,27 @@ def balashammer(n: int, m: int, cost_matrix: list[list[int]], cost_row: list[int
     return transport_matrix
 
 
-def acyclic(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
-    visited_names : list[str] =[] # To display in case of a cycle
-    queue : list[tuple] = [] # Is formated as such that each element of the list takes the following form : (B,i) 
-                        # - B is either a binary number that tell if the "vertice" is a provision (0) or an order (1)    
-                        # - i refers to the index of the "vertice" in the cost_row or provision_column
+def acyclic(n: int, m: int, transport_matrix: list[list[int]], doPrint=False) -> (bool):
+    visited_names: list[str] = []  # To display in case of a cycle
+    queue: list[tuple] = []  # Is formated as such that each element of the list takes the following form : (B,i)
+    # - B is either a binary number that tell if the "vertice" is a provision (0) or an order (1)
+    # - i refers to the index of the "vertice" in the cost_row or provision_column
     finished = False
     is_acyclic = True
     last_visited = [-1]
-    visited_provisions = [False]*n
-    visited_orders = [False]*m # These two list exist in case of a disconnected graph 
+    visited_provisions = [False] * n
+    visited_orders = [False] * m  # These two list exist in case of a disconnected graph
 
-    queue.append((0,0))
-    
-    while is_acyclic and not(finished) and len(queue) > 0:
-        if queue[0][0] == 0: # We have a "provision" vertice
+    queue.append((0, 0))
+
+    while is_acyclic and not (finished) and len(queue) > 0:
+        if queue[0][0] == 0:  # We have a "provision" vertice
             for i in range(m):
                 if transport_matrix[queue[0][1]][i] != 0 and i != last_visited[0]:
-                    queue.append((1,i))
+                    queue.append((1, i))
                     last_visited.append(queue[0][1])
-            
-            name = "P" + str(queue[0][1]+1)
+
+            name = "P" + str(queue[0][1] + 1)
             if visited_provisions[queue[0][1]]:
                 is_acyclic = False
             else:
@@ -146,14 +144,14 @@ def acyclic(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
             visited_names.append(name)
             last_visited.pop(0)
             queue.pop(0)
-        
-        else: # We have an "order" vertice
+
+        else:  # We have an "order" vertice
             for i in range(n):
                 if transport_matrix[i][queue[0][1]] != 0 and i != last_visited[0]:
-                    queue.append((0,i))
+                    queue.append((0, i))
                     last_visited.append(queue[0][1])
-            
-            name = "C" + str(queue[0][1]+1)
+
+            name = "C" + str(queue[0][1] + 1)
             if visited_orders[queue[0][1]]:
                 is_acyclic = False
             else:
@@ -163,41 +161,41 @@ def acyclic(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
             queue.pop(0)
 
         if len(queue) == 0:
-            if len(visited_names) == m+n:
+            if len(visited_names) == m + n:
                 finished = True
-            else: # The graph is discontinued and we need to continue from a non visited vertice
+            else:  # The graph is discontinued and we need to continue from a non visited vertice
                 for i in range(n):
                     if not visited_provisions[i]:
-                        queue.append((0,i))
+                        queue.append((0, i))
                         break
                 if len(queue) == 0:
                     for i in range(m):
                         if not visited_orders[i]:
-                            queue.append((1,i))
+                            queue.append((1, i))
                             break
                 last_visited.append(-1)
-        
-    #if is_acyclic:
-        #print("The graph is acyclic and has the following path:")
-        #print(visited_names)
-    #else:
-        #print("The graph has the following cycle:")
-        #print(visited_names)
+    if doPrint:
+        if is_acyclic:
+            print("The graph is acyclic and has the following path:")
+            print(visited_names)
+        else:
+            print("The graph has the following cycle:")
+            print(visited_names)
     return is_acyclic
 
-    
+
 def connected(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
     subgraphs : list[list[str]] =[] # To display in case of a cycle
-    queue : list[tuple] = [] # Is formated as such that each element of the list takes the following form : (B,i) 
-                        # - B is either a binary number that tell if the "vertice" is a provision (0) or an order (1)    
+    queue : list[tuple] = [] # Is formated as such that each element of the list takes the following form : (B,i)
+                        # - B is either a binary number that tell if the "vertice" is a provision (0) or an order (1)
                         # - i refers to the index of the "vertice" in the cost_row or provision_column
     finished = False
-    
+
     last_visited = [-1]
     visited_provisions = [False]*n
-    visited_orders = [False]*m # These two list exist in case of a disconnected graph 
+    visited_orders = [False]*m # These two list exist in case of a disconnected graph
 
-    
+
     while not(finished):
         visited_names : list[str] = []
         is_complete = True
@@ -213,28 +211,28 @@ def connected(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
                     break
         if len(queue) == 0:
             finished = True
-        else : 
+        else :
             last_visited.append(-1)
-        
+
         while is_complete and len(queue) > 0:
             if queue[0][0] == 0: # We have a "provision" vertice
                 for i in range(m):
                     if transport_matrix[queue[0][1]][i] != 0 and not visited_orders[i]:
                         queue.append((1,i))
                         last_visited.append(queue[0][1])
-                
+
                 name = "P" + str(queue[0][1]+1)
                 visited_provisions[queue[0][1]] = True
                 visited_names.append(name)
                 last_visited.pop(0)
                 queue.pop(0)
-            
+
             else: # We have an "order" vertice
                 for i in range(n):
                     if transport_matrix[i][queue[0][1]] != 0 and not visited_provisions[i]:
                         queue.append((0,i))
                         last_visited.append(queue[0][1])
-                
+
                 name = "C" + str(queue[0][1]+1)
                 visited_orders[queue[0][1]] = True
                 visited_names.append(name)
@@ -247,10 +245,10 @@ def connected(n: int, m: int, transport_matrix: list[list[int]]) -> (bool):
                 else: # The graph is discontinued and we need to restart a new subgraph
                     is_complete = False
         subgraphs.append(visited_names)
-        
+
     if len(subgraphs) == 1:
-        print("The graph is connected and has the following path:")
-        print(subgraphs[0])
+        print("The graph is connected and has the following nodes:")
+        print(", ".join(subgraphs[0]))
     else:
         print("The graph is unconnected and is composed of the following subgraphs:")
         for i in subgraphs:
@@ -370,13 +368,24 @@ def find_cycle(n, m, transport_matrix, start_cell): # After some research, only 
 def apply_cycle_update(transport_matrix, path) -> list[list[int]]:
     path = path[:-1] # We have a duplicate at the start and end of the list
     theta = min((0 if transport_matrix[i][j] == -1 else transport_matrix[i][j]) for i, j in path[1::2]) # min of the - value, without the -1
+    print(f"Theta: {theta}")
+
+    if theta == 0: # We remove one old fake basic edge, to add a new one
+        transport_matrix[path[0][0]][path[0][1]] = -1
+
+        for i, j in path[1::2]:
+            if transport_matrix[i][j] == -1:
+                transport_matrix[i][j] = 0
+                break
+
+        return transport_matrix
+
+    transport_matrix = clean_epsilon(transport_matrix)
+
     for k in range(len(path)):
         i, j = path[k]
-        if transport_matrix[i][j] == -1:
-            transport_matrix[i][j] = 0
         if k % 2 == 0:
             transport_matrix[i][j] += theta
         else:
             transport_matrix[i][j] -= theta
     return transport_matrix
-

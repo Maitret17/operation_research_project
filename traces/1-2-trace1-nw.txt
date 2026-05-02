@@ -1,0 +1,129 @@
+﻿transportation problems file list:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+================================================================================
+Select a transportation problem file or type 'q' to exit :
+================================================================================
+The cost matrix:
+        C1  C2 Provisions
+P1      30  20        100
+P2      10  50        100
+Orders 100 100           
+================================================================================
+Select which algorithm to use:
+1 - northwest
+2 - balashammer
+================================================================================
+The initial transportation proposal: 
+        C1  C2 Provisions
+P1     100   0        100
+P2       0 100        100
+Orders 100 100           
+
+Total transport cost: 8000
+
+----Iteration 1----
+
+Current transportation proposal:
+        C1  C2 Provisions
+P1     100   0        100
+P2       0 100        100
+Orders 100 100           
+
+Current total cost: 8000
+Degeneracy test:
+Basic edges: 2
+Expected basic edges: 3
+
+The proposal is degenerate
+One basic edge was added at row 2 column 1
+Proposal after degeneracy fix:
+        C1  C2 Provisions
+P1     100   0        100
+P2      -1 100        100
+Orders 100 100           
+
+Transport graph test:
+The graph is connected and has the following nodes:
+P1, C1, P2, C2
+The graph is acyclic
+The transport graph is a tree
+
+Potential matrix:
+       C1 C2
+P1     30 70
+P2     10 50
+
+Marginal cost matrix:
+       C1  C2
+P1      ∞ -50
+P2      ∞   ∞
+
+Edge to add: row 1, column 2
+Marginal cost: -50
+Cycle: 
+[(0, 1), (1, 1), (1, 0), (0, 0), (0, 1)]
+Theta: 100
+
+Updated transportation proposal:
+        C1  C2 Provisions
+P1       0 100        100
+P2     100   0        100
+Orders 100 100           
+
+----Iteration 2----
+
+Current transportation proposal:
+        C1  C2 Provisions
+P1       0 100        100
+P2     100   0        100
+Orders 100 100           
+
+Current total cost: 3000
+Degeneracy test:
+Basic edges: 2
+Expected basic edges: 3
+
+The proposal is degenerate
+One basic edge was added at row 1 column 1
+Proposal after degeneracy fix:
+        C1  C2 Provisions
+P1      -1 100        100
+P2     100   0        100
+Orders 100 100           
+
+Transport graph test:
+The graph is connected and has the following nodes:
+P1, C1, C2, P2
+The graph is acyclic
+The transport graph is a tree
+
+Potential matrix:
+       C1 C2
+P1     30 20
+P2     10  0
+
+Marginal cost matrix:
+       C1 C2
+P1      ∞  ∞
+P2      ∞ 50
+
+The proposal is optimal
+Minimal transportation proposal:
+        C1  C2 Provisions
+P1       0 100        100
+P2     100   0        100
+Orders 100 100           
+
+Minimal cost: 3000
+
