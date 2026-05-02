@@ -45,8 +45,8 @@ def measure_once(n: int):
 
 
 def main():
-    sizes = [10, 40, 100]      # TEST FIRST
-    repetitions = 100           # TEST FIRST
+    sizes = [10, 40, 100]
+    repetitions = 100
 
     with open("complexity_results.csv", "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
