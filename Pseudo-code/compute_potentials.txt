@@ -1,0 +1,29 @@
+FUNCTION compute_potentials(n, m, cost_matrix, transport_matrix): -> u, v
+    START
+        SET u to a list of n INF values
+        SET v to a list of m INF values
+        SET u[0] to 0
+
+        SET updated to TRUE
+        WHILE updated is TRUE
+
+            SET updated to FALSE
+
+            FOR each row index i from 0 to n-1
+                FOR each column index j from 0 to m-1
+                    IF transport_matrix[i][j] is not 0 THEN  // Basic cell
+                        IF u[i] is not INF AND v[j] equals INF THEN
+                            SET v[j] to cost_matrix[i][j] - u[i]
+                            SET updated to TRUE
+                        ELSE IF v[j] is not INF AND u[i] equals INF THEN
+                            SET u[i] to cost_matrix[i][j] - v[j]
+                            SET updated to TRUE
+                        END IF
+                    END IF
+                ENDFOR
+            ENDFOR
+
+        ENDWHILE
+
+        RETURN u, v
+    END

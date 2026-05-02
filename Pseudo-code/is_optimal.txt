@@ -1,0 +1,10 @@
+FUNCTION is_optimal(best_value):
+    START
+        IF best_value is NULL THEN
+            RETURN TRUE
+        END IF
+        IF best_value < 0 THEN
+            RETURN FALSE
+        END IF
+        RETURN TRUE
+    END

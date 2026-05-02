@@ -1,0 +1,51 @@
+FUNCTION find_cycle(n, m, transport_matrix, start_cell): -> path
+    START
+        SET to_explore to a stack containing:
+            (start_cell, [start_cell], "row")
+            (start_cell, [start_cell], "column")
+
+        WHILE to_explore is not empty
+
+            POP (current, path, move_type) from top of to_explore
+            SET (i, j) to current
+
+            IF move_type equals "row" THEN  // Move along the row, changing columns
+                FOR each column index col from 0 to m-1
+                    SET next_cell to (i, col)
+
+                    IF next_cell equals current THEN
+                        CONTINUE to next col
+                    END IF
+
+                    IF next_cell equals start_cell AND length of path >= 4 THEN
+                        RETURN path appended with start_cell
+                    END IF
+
+                    IF transport_matrix[i][col] is not 0 AND next_cell is not in path THEN
+                        PUSH (next_cell, path appended with next_cell, "column") to to_explore
+                    END IF
+                ENDFOR
+            END IF
+
+            IF move_type equals "column" THEN  // Move along the column, changing rows
+                FOR each row index row from 0 to n-1
+                    SET next_cell to (row, j)
+
+                    IF next_cell equals current THEN
+                        CONTINUE to next row
+                    END IF
+
+                    IF next_cell equals start_cell AND length of path >= 4 THEN
+                        RETURN path appended with start_cell
+                    END IF
+
+                    IF transport_matrix[row][j] is not 0 AND next_cell is not in path THEN
+                        PUSH (next_cell, path appended with next_cell, "row") to to_explore
+                    END IF
+                ENDFOR
+            END IF
+
+        ENDWHILE
+
+        RAISE error "No cycle found from start_cell"
+    END

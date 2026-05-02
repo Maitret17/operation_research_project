@@ -1,0 +1,37 @@
+FUNCTION fix_degeneracy(n, m, cost_matrix, transport_matrix): -> transport_matrix:
+    START
+        WHILE number of edges in transport_matrix < n+m-1
+
+            SET candidates to empty list
+
+            FOR each row index i from 0 to n-1
+                FOR each column index j from 0 to m-1
+                    IF transport_matrix[i][j] equals 0 THEN
+                        APPEND (cost_matrix[i][j], i, j) to candidates
+                    END IF
+                ENDFOR
+            ENDFOR
+
+            SORT candidates in ascending order by cost
+
+            SET edge_add to FALSE
+            FOR each (cost, i, j) in candidates
+                SET test_matrix to a deep copy of transport_matrix
+                SET test_matrix[i][j] to -1
+
+                IF CALL acyclic with n, m, test_matrix RETURNING TRUE THEN
+                    SET transport_matrix[i][j] to -1
+                    DISPLAY "One basic edge was added at row " (i+1) " column " (j+1)
+                    SET edge_add to TRUE
+                    EXIT loop
+                END IF
+            ENDFOR
+
+            IF edge_add is FALSE THEN
+                RAISE error "Could not fix degeneracy without creating a cycle"
+            END IF
+
+        ENDWHILE
+
+        RETURN transport_matrix
+    END

@@ -1,0 +1,24 @@
+FUNCTION apply_cycle_update(transport_matrix, path): -> transport_matrix
+    START
+        REMOVE last element from path  // Remove the duplicate of start_cell at the end
+
+        COMPUTE theta as the minimum value of transport_matrix[i][j]
+            for each (i, j) at odd positions in path,
+            treating any -1 value as 0
+
+        FOR each index k from 0 to length of path - 1
+            SET (i, j) to path[k]
+
+            IF transport_matrix[i][j] equals -1 THEN
+                SET transport_matrix[i][j] to 0
+            END IF
+
+            IF k is even THEN
+                ADD theta to transport_matrix[i][j]
+            ELSE
+                SUBTRACT theta from transport_matrix[i][j]
+            END IF
+        ENDFOR
+
+        RETURN transport_matrix
+    END

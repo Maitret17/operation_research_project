@@ -1,0 +1,26 @@
+FUNCTION northwest(n, m, cost_row, provision_column): -> transport_matrix
+    START
+        SET transport_matrix to a n×m matrix of zeros
+        SET i to 0
+        SET j to 0
+        SET temp_cost_row to a copy of cost_row
+        SET temp_provision_column to a copy of provision_column
+
+        WHILE i < n AND j < m
+
+            SET allocation as the minimum of temp_provision_column[i] and temp_cost_row[j]
+            SET transport_matrix[i][j] to allocation
+            SUBTRACT allocation from temp_provision_column[i]
+            SUBTRACT allocation from temp_cost_row[j]
+
+            IF temp_provision_column[i] equals 0 THEN
+                INCREMENT i
+            END IF
+            IF temp_cost_row[j] equals 0 THEN
+                INCREMENT j
+            END IF
+
+        ENDWHILE
+
+        RETURN transport_matrix
+    END

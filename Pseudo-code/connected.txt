@@ -1,0 +1,91 @@
+FUNCTION connected(n, m, transport_matrix): 
+    START
+        SET subgraphs to empty list
+        SET queue to empty list
+        SET finished to FALSE
+        SET last_visited to [-1]
+        SET visited_provisions to list of n FALSE values
+        SET visited_orders to list of m FALSE values
+
+        WHILE NOT finished
+
+            SET visited_names to empty list
+            SET is_complete to TRUE
+
+            FOR each provision index i from 0 to n-1
+                IF visited_provisions[i] is FALSE THEN
+                    APPEND (provision, i) to queue
+                    EXIT loop
+                END IF
+            ENDFOR
+
+            IF queue is empty THEN
+                FOR each order index i from 0 to m-1
+                    IF visited_orders[i] is FALSE THEN
+                        APPEND (order, i) to queue
+                        EXIT loop
+                    END IF
+                ENDFOR
+            END IF
+
+            IF queue is empty THEN
+                SET finished to TRUE
+            ELSE
+                APPEND -1 to last_visited
+            END IF
+
+            WHILE is_complete AND queue is not empty
+
+                OBTAIN (type, idx) from front of queue
+
+                IF type equals 0 // provision :
+                    FOR each order index i from 0 to m-1
+                        IF transport_matrix[idx][i] is not zero AND visited_orders[i] is FALSE THEN
+                            APPEND (order, i) to queue
+                            APPEND idx to last_visited
+                        END IF
+                    ENDFOR
+
+                    SET name to "P" + (idx + 1)
+                    SET visited_provisions[idx] to TRUE
+                    APPEND name to visited_names
+                    REMOVE front element from last_visited
+                    REMOVE front element from queue
+
+                ELSE // order
+                    FOR each provision index i from 0 to n-1
+                        IF transport_matrix[i][idx] is not zero AND visited_provisions[i] is FALSE THEN
+                            APPEND (provision, i) to queue
+                            APPEND idx to last_visited
+                        END IF
+                    ENDFOR
+
+                    SET name to "C" + (idx + 1)
+                    SET visited_orders[idx] to TRUE
+                    APPEND name to visited_names
+                    REMOVE front element from last_visited
+                    REMOVE front element from queue
+                ENDIF
+
+                IF queue is empty THEN
+                    IF total nodes visited equals m + n THEN
+                        SET finished to TRUE
+                    ELSE
+                        SET is_complete to FALSE
+                    END IF
+                END IF
+
+            ENDWHILE
+
+            APPEND visited_names to subgraphs
+
+        ENDWHILE
+
+        IF number of subgraphs equals 1
+            SAY("The graph is connected and has the following path:")
+            DISPLAY(the unique subgraph in the graph)
+        ELSE
+            SAY("The graph is unconnected and is composed of the following subgraphs:")
+            DISPLAY(the subgraphs that compose the graph)
+        RETURN number of subgraphs equals 1
+    END

@@ -1,0 +1,114 @@
+FUNCTION balashammer(n, m, cost_matrix, cost_row, provision_column): -> transport_matrix
+    START
+        SET transport_matrix to a n×m matrix of zeros
+        SET mat to a deep copy of cost_matrix, extended with an extra column and an extra row of zeros
+        SET cost to a deep copy of cost_row
+        SET provision to a deep copy of provision_column
+        SET searchinglist_n to [0, 1, ..., n-1]
+        SET searchinglist_m to [0, 1, ..., m-1]
+
+
+        SUBROUTINE regret(l):
+            SET min1 to the minimum value in l
+            IF min1 appears only once in l AND length of l >= 2 THEN
+                SET min2 to the second smallest distinct value in l
+            ELSE IF length of l <= 1 THEN
+                SET min2 to 0
+            ELSE
+                SET min2 to min1
+            END IF
+            RETURN min2 - min1
+        END SUBROUTINE
+
+
+        SUBROUTINE minindexlist(l):
+            SET minimum to the minimum value in l
+            FOR each index i in l
+                IF l[i] equals minimum THEN
+                    RETURN i
+                END IF
+            ENDFOR
+        END SUBROUTINE
+
+
+        WHILE sum of provision > 0 AND sum of cost > 0
+
+            // Compute regret for each active row
+            FOR each row i in searchinglist_n
+                SET mat[i][m] to CALL regret with [mat[i][j] for each j in searchinglist_m]
+            ENDFOR
+
+            // Compute regret for each active column
+            FOR each column j in searchinglist_m
+                SET mat[n][j] to CALL regret with [mat[i][j] for each i in searchinglist_n]
+            ENDFOR
+
+            // Find the row or column with the highest regret
+            SET maxindex to (first element of searchinglist_n, m)
+            FOR each row i in searchinglist_n
+                IF mat[i][m] > mat[maxindex] THEN
+                    SET maxindex to (i, m)
+                END IF
+            ENDFOR
+            FOR each column j in searchinglist_m
+                IF mat[n][j] > mat[maxindex] THEN
+                    SET maxindex to (n, j)
+                END IF
+            ENDFOR
+
+            IF maxindex[0] equals n THEN  // largest penalty is a column one
+                SET minindex to the row in searchinglist_n with the smallest cost in column maxindex[1]
+                SET transport_matrix[minindex][maxindex[1]] to minimum of cost[maxindex[1]] and provision[minindex]
+                SUBTRACT transport_matrix[minindex][maxindex[1]] from cost[maxindex[1]]
+                SUBTRACT transport_matrix[minindex][maxindex[1]] from provision[minindex]
+
+                IF cost[maxindex[1]] equals 0 THEN
+                    FOR each row i in searchinglist_n
+                        IF i is not minindex THEN
+                            SET transport_matrix[i][maxindex[1]] to 0
+                        END IF
+                        SET mat[i][maxindex[1]] to INF
+                    ENDFOR
+                    REMOVE maxindex[1] from searchinglist_m
+                END IF
+                IF provision[minindex] equals 0 THEN
+                    FOR each column i in searchinglist_m
+                        IF i is not maxindex[1] THEN
+                            SET transport_matrix[minindex][i] to 0
+                        END IF
+                        SET mat[minindex][i] to INF
+                    ENDFOR
+                    REMOVE minindex from searchinglist_n
+                END IF
+
+            ELSE IF maxindex[1] equals m THEN  // largest penalty is a row one
+                SET minindex to the column in searchinglist_m with the smallest cost in row maxindex[0]
+                SET transport_matrix[maxindex[0]][minindex] to minimum of provision[maxindex[0]] and cost[minindex]
+                SUBTRACT transport_matrix[maxindex[0]][minindex] from provision[maxindex[0]]
+                SUBTRACT transport_matrix[maxindex[0]][minindex] from cost[minindex]
+
+                IF provision[maxindex[0]] equals 0 THEN
+                    FOR each column i in searchinglist_m
+                        IF i is not minindex THEN
+                            SET transport_matrix[maxindex[0]][i] to 0
+                        END IF
+                        SET mat[maxindex[0]][i] to INF
+                    ENDFOR
+                    REMOVE maxindex[0] from searchinglist_n
+                END IF
+                IF cost[minindex] equals 0 THEN
+                    FOR each row i in searchinglist_n
+                        IF i is not maxindex[0] THEN
+                            SET transport_matrix[i][minindex] to 0
+                        END IF
+                        SET mat[i][minindex] to INF
+                    ENDFOR
+                    REMOVE minindex from searchinglist_m
+                END IF
+
+            END IF
+
+        ENDWHILE
+
+        RETURN transport_matrix
+    END
